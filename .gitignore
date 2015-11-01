@@ -76,6 +76,13 @@ ipch/
 *.vsp
 *.vspx
 
+# 3rd party libraries
+3rdparty/
+lib/
+
+# models
+models/
+
 # TFS 2012 Local Workspace
 $tf/
 
