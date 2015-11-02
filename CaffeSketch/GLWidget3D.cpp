@@ -183,7 +183,6 @@ void GLWidget3D::mouseReleaseEvent(QMouseEvent *e) {
 void GLWidget3D::mouseMoveEvent(QMouseEvent *e) {
 	if (ctrlPressed) {
 		if (e->buttons() & Qt::LeftButton) { // Rotate
-			std::cout << "Rotate" << std::endl;
 			camera.rotate(e->x(), e->y());
 		}
 		else if (e->buttons() & Qt::MidButton) { // Move
