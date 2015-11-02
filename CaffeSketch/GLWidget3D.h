@@ -30,6 +30,7 @@ private:
 	bool ctrlPressed;
 	Classifier* classifier;
 	std::vector<QImage> images;
+	std::map<std::string, std::vector<cga::Grammar> > grammars;
 
 	Camera camera;
 	glm::vec3 light_dir;
@@ -40,11 +41,13 @@ private:
 public:
 	GLWidget3D(QWidget *parent);
 	void drawLineTo(const QPoint &endPoint);
-	void newImage();
+	void clearSketch();
+	void clearGeometry();
 	void loadImage(const QString& filename);
 	void drawScene(int drawMode);
 	void loadCGA(char* filename);
 	void predict();
+	void selectOption(int option_index);
 	void keyPressEvent(QKeyEvent* e);
 	void keyReleaseEvent(QKeyEvent* e);
 

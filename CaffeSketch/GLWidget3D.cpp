@@ -16,6 +16,7 @@
 GLWidget3D::GLWidget3D(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
 	mainWin = (MainWindow*)parent;
 	dragging = false;
+	ctrlPressed = false;
 
 	// これがないと、QPainterによって、OpenGLによる描画がクリアされてしまう
 	setAutoFillBackground(false);
@@ -35,12 +36,26 @@ GLWidget3D::GLWidget3D(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers
 		"../models/buildings/mean.binaryproto",
 		"../models/buildings/words.txt");
 
-	QStringList filters;
-	filters << "*.png" << "*.jpg" << "*.bmp";
-	QFileInfoList fileInfoList = QDir("../thumbs/buildings/").entryInfoList(filters, QDir::Files | QDir::NoDotAndDotDot);
-	for (int i = 0; i < fileInfoList.size(); ++i) {
-		images.push_back(QImage(fileInfoList[i].absoluteFilePath()).scaled(CustomWidget::IMAGE_WIDTH, CustomWidget::IMAGE_HEIGHT));
+	{
+		QStringList filters;
+		filters << "*.png" << "*.jpg" << "*.bmp";
+		QFileInfoList fileInfoList = QDir("../thumbs/buildings/").entryInfoList(filters, QDir::Files | QDir::NoDotAndDotDot);
+		for (int i = 0; i < fileInfoList.size(); ++i) {
+			images.push_back(QImage(fileInfoList[i].absoluteFilePath()).scaled(CustomWidget::IMAGE_WIDTH, CustomWidget::IMAGE_HEIGHT));
+		}
 	}
+
+	{
+		QStringList filters;
+		filters << "*.xml";
+		QFileInfoList fileInfoList = QDir("../cga/building/").entryInfoList(filters, QDir::Files | QDir::NoDotAndDotDot);
+		for (int i = 0; i < fileInfoList.size(); ++i) {
+			cga::Grammar grammar;
+			cga::parseGrammar(fileInfoList[i].absoluteFilePath().toUtf8().constData(), grammar);
+			grammars["building"].push_back(grammar);
+		}
+	}
+
 }
 
 void GLWidget3D::drawLineTo(const QPoint &endPoint) {
@@ -56,12 +71,25 @@ void GLWidget3D::drawLineTo(const QPoint &endPoint) {
 	lastPos = endPoint;
 }
 
-void GLWidget3D::newImage() {
+/**
+ * Clear the canvas.
+ */
+void GLWidget3D::clearSketch() {
 	sketch.fill(qRgba(255, 255, 255, 255));
 
 	update();
 }
 
+void GLWidget3D::clearGeometry() {
+	renderManager.removeObjects();
+	renderManager.updateShadowMap(this, light_dir, light_mvpMatrix);
+	update();
+}
+
+/**
+ * Load a sketch image from a file, and display options order by their probabilities.
+ * This is for test usage.
+ */
 void GLWidget3D::loadImage(const QString& filename) {
 	QImage newImage;
 	newImage.load(filename);
@@ -71,6 +99,7 @@ void GLWidget3D::loadImage(const QString& filename) {
 	painter.drawImage(0, 0, newImage);
 
 	predict();
+	// predict function calls update(), so we do not need to call it twice.
 	//update();
 }
 
@@ -88,6 +117,10 @@ void GLWidget3D::drawScene(int drawMode) {
 	renderManager.renderAll();
 }
 
+/**
+ * Load a grammar from a file and generate a 3d geometry.
+ * This is only for test usage.
+ */
 void GLWidget3D::loadCGA(char* filename) {
 	renderManager.removeObjects();
 
@@ -119,6 +152,10 @@ void GLWidget3D::loadCGA(char* filename) {
 	updateGL();
 }
 
+/**
+ * Use the sketch as an input to the pretrained network, and obtain the probabilities as output.
+ * Then, display the options ordered by the probabilities.
+ */
 void GLWidget3D::predict() {
 	QImage swapped = sketch.scaled(256, 256).rgbSwapped();
 	cv::Mat img = cv::Mat(swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine()).clone();
@@ -128,10 +165,42 @@ void GLWidget3D::predict() {
 	QPainter painter(&sketch);
 	for (size_t i = 0; i < predictions.size(); ++i) {
 		Prediction p = predictions[i];
-		mainWin->addListItem(QString::number(p.second, 'f', 3), images[p.first]);
-
-		std::cout << std::fixed << std::setprecision(3) << p.second << " - " << p.first << std::endl;
+		mainWin->addListItem(QString::number(p.second, 'f', 3), images[p.first], p.first);
 	}
+
+	update();
+}
+
+/**
+ * This function is called when an option is clicked by the user.
+ * The corresponding grammar is used to generate a 3d geometry and display it.
+ */
+void GLWidget3D::selectOption(int option_index) {
+	renderManager.removeObjects();
+
+	float object_width = 16.0f;
+	float object_height = 8.0f;
+
+	{ // lot
+		cga::Rectangle* start = new cga::Rectangle("Start", glm::translate(glm::rotate(glm::mat4(), -3.141592f * 0.5f, glm::vec3(1, 0, 0)), glm::vec3(-object_width*0.5f, -object_height*0.5f, 0)), glm::mat4(), object_width, object_height, glm::vec3(1, 1, 1));
+		system.stack.push_back(boost::shared_ptr<cga::Shape>(start));
+	}
+
+	cga::Grammar g = grammars["building"][option_index];
+
+	try {
+		system.derive(g);
+		system.generateGeometry(&renderManager);
+		renderManager.centerObjects();
+	}
+	catch (const std::string& ex) {
+		std::cout << "ERROR:" << std::endl << ex << std::endl;
+	}
+	catch (const char* ex) {
+		std::cout << "ERROR:" << std::endl << ex << std::endl;
+	}
+
+	renderManager.updateShadowMap(this, light_dir, light_mvpMatrix);
 
 	update();
 }
@@ -142,6 +211,9 @@ void GLWidget3D::keyPressEvent(QKeyEvent *e) {
 	switch (e->key()) {
 	case Qt::Key_Control:
 		ctrlPressed = true;
+		break;
+	case Qt::Key_Delete:
+		clearGeometry();
 		break;
 	default:
 		break;
@@ -191,6 +263,7 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *e) {
 		else if (e->buttons() & Qt::RightButton) { // Zoom
 			camera.zoom(e->x(), e->y());
 		}
+		clearSketch();
 	}
 	else {
 		drawLineTo(e->pos());
@@ -204,9 +277,10 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *e) {
  */
 void GLWidget3D::initializeGL() {
 	renderManager.init("../shaders/vertex.glsl", "../shaders/geometry.glsl", "../shaders/fragment.glsl", false);
-	renderManager.renderingMode = RenderManager::RENDERING_MODE_WIREFRAME;
+	renderManager.renderingMode = RenderManager::RENDERING_MODE_REGULAR;
 
-	glClearColor(1, 1, 1, 0.0);
+	//glClearColor(1, 1, 1, 0.0);
+	glClearColor(0.9, 0.9, 0.9, 0.0);
 
 	system.modelMat = glm::rotate(glm::mat4(), -3.1415926f * 0.5f, glm::vec3(1, 0, 0));
 

@@ -40,18 +40,31 @@ void MainWindow::clearList() {
 	thumbsList->clear();
 }
 
-void MainWindow::addListItem(const QString& text, const QImage& image) {
-	CustomWidget* customWidget = new CustomWidget(this, text, image);
+/**
+ * Add an option to the list widget.
+ *
+ * @param text			probability that is shown on this item widget
+ * @param image			image that is shown on this item widget
+ * @param option_index	the index of this option (This index is not the index of the ordered options, but the index of the options in the original order.)
+ */
+void MainWindow::addListItem(const QString& text, const QImage& image, int option_index) {
+	CustomWidget* customWidget = new CustomWidget(this, text, image, option_index);
 	QListWidgetItem *item = new QListWidgetItem();
 	item->setSizeHint(customWidget->size());
 	thumbsList->addItem(item);
 	thumbsList->setItemWidget(item, customWidget);
 }
 
+/**
+ * This is called when the user clicks [File] -> [New].
+ */
 void MainWindow::onNew() {
-	glWidget->newImage();
+	glWidget->clearSketch();
 }
 
+/**
+ * This is called when the user clickes [File] -> [Open]
+ */
 void MainWindow::onOpen() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Image file..."), "", tr("Image Files (*.jpg *.png *.bmp)"));
 	if (filename.isEmpty()) return;
@@ -59,6 +72,9 @@ void MainWindow::onOpen() {
 	glWidget->loadImage(filename);
 }
 
+/**
+* This is called when the user clickes [File] -> [Open CGA]
+*/
 void MainWindow::onOpenCGA() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open CGA file..."), "", tr("CGA Files (*.xml)"));
 	if (filename.isEmpty()) return;
@@ -66,6 +82,9 @@ void MainWindow::onOpenCGA() {
 	glWidget->loadCGA(filename.toUtf8().data());
 }
 
+/**
+* This is called when the user clickes [Tool] -> [Predict]
+*/
 void MainWindow::onPredict() {
 	glWidget->predict();
 }

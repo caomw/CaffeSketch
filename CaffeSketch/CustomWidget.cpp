@@ -5,11 +5,15 @@
 #include <QPainter>
 #include <QLabel>
 #include <QWidget>
+#include "MainWindow.h"
+#include <iostream>
 
-//int CustomWidget::WIDTH = 200;
-//int CustomWidget::HEIGHT = 200;
+CustomWidget::CustomWidget(QWidget *parent, const QString& text, const QImage& image, int option_index) : QLabel(parent) {
+	mainWin = (MainWindow*)parent;
+	this->option_index = option_index;
 
-CustomWidget::CustomWidget(QWidget *parent, const QString& text, const QImage& image) : QLabel(parent) {
+	connect(this, SIGNAL(clicked(int)), this, SLOT(onClicked(int)));
+
 	this->setFixedSize(WIDGET_WIDTH, WIDGET_HEIGHT);
 
 	QImage img = image;
@@ -21,4 +25,12 @@ CustomWidget::CustomWidget(QWidget *parent, const QString& text, const QImage& i
 
 	this->setPixmap(QPixmap::fromImage(img));
 	this->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void CustomWidget::mousePressEvent(QMouseEvent* e) {
+	emit clicked(option_index);
+}
+
+void CustomWidget::onClicked(int option_index) {
+	mainWin->getGLWidget()->selectOption(option_index);
 }

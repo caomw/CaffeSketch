@@ -17,7 +17,8 @@ private:
 public:
 	MainWindow(QWidget *parent = 0);
 	void clearList();
-	void addListItem(const QString& text, const QImage& image);
+	void addListItem(const QString& text, const QImage& image, int option_index);
+	GLWidget3D* getGLWidget() { return glWidget; }
 
 protected:
 	void keyPressEvent(QKeyEvent* e);

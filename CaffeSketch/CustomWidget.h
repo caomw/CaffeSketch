@@ -3,8 +3,13 @@
 #include <QLabel>
 #include <QImage>
 #include <QString>
+#include <QMouseEvent>
+
+class MainWindow;
 
 class CustomWidget : public QLabel {
+	Q_OBJECT
+
 public:
 	static const int WIDGET_WIDTH = 200;
 	static const int WIDGET_HEIGHT = 200;
@@ -12,6 +17,19 @@ public:
 	static const int IMAGE_HEIGHT = 180;
 
 public:
-	CustomWidget(QWidget *parent, const QString& text, const QImage& image);	
+	MainWindow* mainWin;
+	int option_index;
+
+signals:
+	void clicked(int);
+
+public:
+	CustomWidget(QWidget *parent, const QString& text, const QImage& image, int option_index);	
+
+protected:
+	void mousePressEvent(QMouseEvent* e);
+
+public slots:
+	void onClicked(int option_index);
 };
 

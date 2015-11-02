@@ -222,6 +222,10 @@
     <ClCompile Include="ExtrudeOperator.cpp" />
     <ClCompile Include="GableRoof.cpp" />
     <ClCompile Include="GeneralObject.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_CustomWidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -235,6 +239,10 @@
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CustomWidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -395,7 +403,24 @@
     <ClInclude Include="TextureOperator.h" />
     <ClInclude Include="TranslateOperator.h" />
     <ClInclude Include="Vertex.h" />
-    <CustomBuild Include="CustomWidget.h" />
+    <CustomBuild Include="CustomWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing CustomWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS "-I.\..\..\3rdparty\include" "-I.\..\..\3rdparty\include\cuda" "-I.\..\..\src" "-I.\..\..\src\include" "-ID:\ThirdPartyLibrary\caffe\include" "-ID:\ThirdPartyLibrary\caffe\src" "-ID:\ThirdPartyLibrary\boost_1_57_0" "-ID:\CUDA\Toolkit\include" "-ID:\ThirdPartyLibrary\glog-0.3.3\src\windows" "-ID:\ThirdPartyLibrary\gflags-2.1.1\buildx64\include" "-IC:\Program Files (x86)\Intel\Composer XE 2015\mkl\include" "-IC:\Program Files (x86)\Intel\Composer XE 2015\compiler\include" "-ID:\ThirdPartyLibrary\hdf5\include" "-ID:\ThirdPartyLibrary\leveldb\include" "-ID:\ThirdPartyLibrary\snappy-windows\include" "-ID:\deeplearning\caffeold\3rdparty\include" "-ID:\ThirdPartyLibrary\opencv248\opencv\build\include" "-I." "-I.\GeneratedFiles"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing CustomWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_VARIADIC_MAX=10 -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS "-I$(BOOST_INCLUDEDIR)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtXml" "-I.\..\3rdparty\include" "-I.\..\src" "-I.\..\include" "-I.\..\opencv\include" "-I$(CGAL_DIR)\include" "-I$(CGAL_DIR)\auxiliary\gmp\include" "-I.\..\glm" "-I.\..\glew"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing CustomWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS "-I.\..\..\3rdparty\include" "-I.\..\..\3rdparty\include\cuda" "-I.\..\..\src" "-I.\..\..\src\include" "-ID:\ThirdPartyLibrary\caffe\include" "-ID:\ThirdPartyLibrary\caffe\src" "-ID:\ThirdPartyLibrary\boost_1_57_0" "-ID:\CUDA\Toolkit\include" "-ID:\ThirdPartyLibrary\glog-0.3.3\src\windows" "-ID:\ThirdPartyLibrary\gflags-2.1.1\buildx64\include" "-IC:\Program Files (x86)\Intel\Composer XE 2015\mkl\include" "-IC:\Program Files (x86)\Intel\Composer XE 2015\compiler\include" "-ID:\ThirdPartyLibrary\hdf5\include" "-ID:\ThirdPartyLibrary\leveldb\include" "-ID:\ThirdPartyLibrary\snappy-windows\include" "-ID:\deeplearning\caffeold\3rdparty\include" "-ID:\ThirdPartyLibrary\opencv248\opencv\build\include" "-I." "-I.\GeneratedFiles"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing CustomWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_VARIADIC_MAX=10 -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS "-I$(BOOST_INCLUDEDIR)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtXml" "-I.\..\3rdparty\include" "-I.\..\src" "-I.\..\include" "-I.\..\opencv\include" "-I$(CGAL_DIR)\include" "-I$(CGAL_DIR)\auxiliary\gmp\include" "-I.\..\glm" "-I.\..\glew"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h" />
     <ClInclude Include="GLWidget3D.h" />
   </ItemGroup>
