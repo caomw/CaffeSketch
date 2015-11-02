@@ -448,6 +448,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\locale.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xdebug
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xmemory
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xfacet
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\system_error
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cerrno
@@ -455,7 +456,6 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\errno.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\share.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\vector
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xmemory
 d:\github\caffesketch\3rdparty\include\hdf5\H5public.h
 d:\github\caffesketch\3rdparty\include\hdf5\H5pubconf.h
 d:\github\caffesketch\3rdparty\include\hdf5\H5version.h
