@@ -6,14 +6,29 @@
 #include <QDir>
 #include <QFileInfoList>
 #include "CustomWidget.h"
+#include "OBJLoader.h"
+#include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include "GrammarParser.h"
+#include "Rectangle.h"
+#include "GLUtils.h"
 
 GLWidget3D::GLWidget3D(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
-	dragging = false;
-
 	mainWin = (MainWindow*)parent;
+	dragging = false;
 
 	// これがないと、QPainterによって、OpenGLによる描画がクリアされてしまう
 	setAutoFillBackground(false);
+
+	// 光源位置をセット
+	// ShadowMappingは平行光源を使っている。この位置から原点方向を平行光源の方向とする。
+	light_dir = glm::normalize(glm::vec3(-4, -5, -8));
+
+	// シャドウマップ用のmodel/view/projection行列を作成
+	glm::mat4 light_pMatrix = glm::ortho<float>(-100, 100, -100, 100, 0.1, 200);
+	glm::mat4 light_mvMatrix = glm::lookAt(-light_dir * 50.0f, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	light_mvpMatrix = light_pMatrix * light_mvMatrix;
+
 
 	classifier = new Classifier("../models/buildings/deploy.prototxt",
 		"../models/buildings/train.caffemodel",
@@ -59,6 +74,51 @@ void GLWidget3D::loadImage(const QString& filename) {
 	//update();
 }
 
+/**
+* Draw the scene.
+*/
+void GLWidget3D::drawScene(int drawMode) {
+	if (drawMode == 0) {
+		glUniform1i(glGetUniformLocation(renderManager.program, "depthComputation"), 0);
+	}
+	else {
+		glUniform1i(glGetUniformLocation(renderManager.program, "depthComputation"), 1);
+	}
+
+	renderManager.renderAll();
+}
+
+void GLWidget3D::loadCGA(char* filename) {
+	renderManager.removeObjects();
+
+	float object_width = 16.0f;
+	float object_height = 8.0f;
+
+	{ // for parthenon
+		cga::Rectangle* start = new cga::Rectangle("Start", glm::translate(glm::rotate(glm::mat4(), -3.141592f * 0.5f, glm::vec3(1, 0, 0)), glm::vec3(-object_width*0.5f, -object_height*0.5f, 0)), glm::mat4(), object_width, object_height, glm::vec3(1, 1, 1));
+		system.stack.push_back(boost::shared_ptr<cga::Shape>(start));
+	}
+
+	try {
+		cga::Grammar grammar;
+		cga::parseGrammar(filename, grammar);
+		system.randomParamValues(grammar);
+		system.derive(grammar);
+		system.generateGeometry(&renderManager);
+		renderManager.centerObjects();
+	}
+	catch (const std::string& ex) {
+		std::cout << "ERROR:" << std::endl << ex << std::endl;
+	}
+	catch (const char* ex) {
+		std::cout << "ERROR:" << std::endl << ex << std::endl;
+	}
+
+	renderManager.updateShadowMap(this, light_dir, light_mvpMatrix);
+
+	updateGL();
+}
+
 void GLWidget3D::predict() {
 	QImage swapped = sketch.scaled(256, 256).rgbSwapped();
 	cv::Mat img = cv::Mat(swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine()).clone();
@@ -76,28 +136,66 @@ void GLWidget3D::predict() {
 	update();
 }
 
+void GLWidget3D::keyPressEvent(QKeyEvent *e) {
+	ctrlPressed = false;
+
+	switch (e->key()) {
+	case Qt::Key_Control:
+		ctrlPressed = true;
+		break;
+	default:
+		break;
+	}
+}
+
+void GLWidget3D::keyReleaseEvent(QKeyEvent* e) {
+	ctrlPressed = false;
+}
+
 /**
  * This event handler is called when the mouse press events occur.
  */
 void GLWidget3D::mousePressEvent(QMouseEvent *e) {
-	lastPos = e->pos();
-	dragging = true;
+	if (ctrlPressed) { // move camera
+		camera.mousePress(e->x(), e->y());
+	}
+	else {
+		lastPos = e->pos();
+		dragging = true;
+	}
 }
 
 /**
  * This event handler is called when the mouse release events occur.
  */
 void GLWidget3D::mouseReleaseEvent(QMouseEvent *e) {
-	dragging = false;
-
-	predict();
+	if (ctrlPressed) {
+	}
+	else {
+		dragging = false;
+		predict();
+	}
 }
 
 /**
  * This event handler is called when the mouse move events occur.
  */
 void GLWidget3D::mouseMoveEvent(QMouseEvent *e) {
-	drawLineTo(e->pos());
+	if (ctrlPressed) {
+		if (e->buttons() & Qt::LeftButton) { // Rotate
+			std::cout << "Rotate" << std::endl;
+			camera.rotate(e->x(), e->y());
+		}
+		else if (e->buttons() & Qt::MidButton) { // Move
+			camera.move(e->x(), e->y());
+		}
+		else if (e->buttons() & Qt::RightButton) { // Zoom
+			camera.zoom(e->x(), e->y());
+		}
+	}
+	else {
+		drawLineTo(e->pos());
+	}
 
 	update();
 }
@@ -106,7 +204,12 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *e) {
  * This function is called once before the first call to paintGL() or resizeGL().
  */
 void GLWidget3D::initializeGL() {
+	renderManager.init("../shaders/vertex.glsl", "../shaders/geometry.glsl", "../shaders/fragment.glsl", false);
+	renderManager.renderingMode = RenderManager::RENDERING_MODE_WIREFRAME;
+
 	glClearColor(1, 1, 1, 0.0);
+
+	system.modelMat = glm::rotate(glm::mat4(), -3.1415926f * 0.5f, glm::vec3(1, 0, 0));
 
 	sketch = QImage(this->width(), this->height(), QImage::Format_RGB888);
 	sketch.fill(qRgba(255, 255, 255, 255));
@@ -119,6 +222,8 @@ void GLWidget3D::resizeGL(int width, int height) {
 	height = height?height:1;
 
 	glViewport(0, 0, (GLint)width, (GLint)height );
+	camera.updatePMatrix(width, height);
+	renderManager.resize(width, height);
 
 	QImage newImage(width, height, QImage::Format_RGB888);
 	newImage.fill(qRgba(255, 255, 255, 255));
@@ -132,13 +237,27 @@ void GLWidget3D::paintEvent(QPaintEvent *event) {
 	// OpenGLで描画
 	makeCurrent();
 
+	glUseProgram(renderManager.program);
+
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
+
+
+
+	// Model view projection行列をシェーダに渡す
+	glUniformMatrix4fv(glGetUniformLocation(renderManager.program, "mvpMatrix"), 1, GL_FALSE, &camera.mvpMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(renderManager.program, "mvMatrix"), 1, GL_FALSE, &camera.mvMatrix[0][0]);
+
+	// pass the light direction to the shader
+	//glUniform1fv(glGetUniformLocation(renderManager.program, "lightDir"), 3, &light_dir[0]);
+	glUniform3f(glGetUniformLocation(renderManager.program, "lightDir"), light_dir.x, light_dir.y, light_dir.z);
+
+	drawScene(0);
+
 
 
 
@@ -154,7 +273,7 @@ void GLWidget3D::paintEvent(QPaintEvent *event) {
 
 	// QPainterで描画
 	QPainter painter(this);
-	//painter.setOpacity(0.5);
+	painter.setOpacity(0.5);
 	painter.drawImage(0, 0, sketch);
 	painter.end();
 

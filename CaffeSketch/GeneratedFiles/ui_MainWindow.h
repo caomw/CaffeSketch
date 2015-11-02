@@ -30,6 +30,7 @@ public:
     QAction *actionExit;
     QAction *actionPredict;
     QAction *actionNew;
+    QAction *actionOpenCGA;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -50,6 +51,8 @@ public:
         actionPredict->setObjectName(QStringLiteral("actionPredict"));
         actionNew = new QAction(MainWindowClass);
         actionNew->setObjectName(QStringLiteral("actionNew"));
+        actionOpenCGA = new QAction(MainWindowClass);
+        actionOpenCGA->setObjectName(QStringLiteral("actionOpenCGA"));
         centralWidget = new QWidget(MainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         MainWindowClass->setCentralWidget(centralWidget);
@@ -72,6 +75,7 @@ public:
         menuBar->addAction(menuTool->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
+        menuFile->addAction(actionOpenCGA);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuTool->addAction(actionPredict);
@@ -91,6 +95,7 @@ public:
         actionPredict->setShortcut(QApplication::translate("MainWindowClass", "Ctrl+P", 0));
         actionNew->setText(QApplication::translate("MainWindowClass", "New", 0));
         actionNew->setShortcut(QApplication::translate("MainWindowClass", "Ctrl+N", 0));
+        actionOpenCGA->setText(QApplication::translate("MainWindowClass", "Open CGA", 0));
         menuFile->setTitle(QApplication::translate("MainWindowClass", "File", 0));
         menuTool->setTitle(QApplication::translate("MainWindowClass", "Tool", 0));
     } // retranslateUi

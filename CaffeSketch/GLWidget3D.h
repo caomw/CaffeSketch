@@ -1,10 +1,19 @@
 #pragma once
 
+#include <glew.h>
+#include "Shader.h"
+#include "Vertex.h"
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <vector>
 #include <QImage>
+#include "Camera.h"
+#include "ShadowMapping.h"
+#include "RenderManager.h"
+#include "CGA.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 using namespace std;
 class Classifier;
@@ -18,15 +27,26 @@ private:
 	QImage sketch;
 	QPoint lastPos;
 	bool dragging;
+	bool ctrlPressed;
 	Classifier* classifier;
 	std::vector<QImage> images;
+
+	Camera camera;
+	glm::vec3 light_dir;
+	glm::mat4 light_mvpMatrix;
+	RenderManager renderManager;
+	cga::CGA system;
 
 public:
 	GLWidget3D(QWidget *parent);
 	void drawLineTo(const QPoint &endPoint);
 	void newImage();
 	void loadImage(const QString& filename);
+	void drawScene(int drawMode);
+	void loadCGA(char* filename);
 	void predict();
+	void keyPressEvent(QKeyEvent* e);
+	void keyReleaseEvent(QKeyEvent* e);
 
 protected:
 	void mousePressEvent(QMouseEvent *e);

@@ -19,9 +19,14 @@ public:
 	void clearList();
 	void addListItem(const QString& text, const QImage& image);
 
+protected:
+	void keyPressEvent(QKeyEvent* e);
+	void keyReleaseEvent(QKeyEvent* e);
+
 public slots:
 	void onNew();
 	void onOpen();
+	void onOpenCGA();
 	void onPredict();
 };
 

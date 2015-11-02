@@ -29,6 +29,7 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionOpenCGA"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -77,6 +78,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpenCGA">
+   <property name="text">
+    <string>Open CGA</string>
    </property>
   </action>
  </widget>

@@ -117,7 +117,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;../3rdparty/include;../src;../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INCLUDEDIR);.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;../3rdparty/include;../src;../include;..\opencv\include;$(CGAL_DIR)\include;$(CGAL_DIR)\auxiliary\gmp\include;..\glm;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_VARIADIC_MAX=10;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -132,7 +132,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;../3rdparty/lib;../lib;$(BOOST_LIBRARYDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;../3rdparty/lib;../lib;$(BOOST_LIBRARYDIR);../opencv/lib;../glew;$(CGAL_DIR)\lib;$(CGAL_DIR)\auxiliary\gmp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;caffelibd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;cudart.lib;cublas.lib;curand.lib;libprotobufd.lib;hdf5_tools.lib;hdf5_hl_fortran.lib;hdf5_fortran.lib;hdf5_hl_f90cstub.lib;hdf5_f90cstub.lib;hdf5_cpp.lib;hdf5_hl_cpp.lib;hdf5_hl.lib;hdf5.lib;opencv_world300.lib;leveldbd.lib;cublas_device.lib;cuda.lib;libglog.lib;lmdb.lib;libopenblas.dll.a;libgflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CudaCompile>
@@ -169,7 +169,7 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;../3rdparty/include;../src;../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INCLUDEDIR);.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;../3rdparty/include;../src;../include;..\opencv\include;$(CGAL_DIR)\include;$(CGAL_DIR)\auxiliary\gmp\include;..\glm;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_VARIADIC_MAX=10;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -184,8 +184,8 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;../3rdparty/lib;../lib;$(BOOST_LIBRARYDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5OpenGL.lib;opengl32.lib;glu32.lib;Qt5Widgets.lib;Qt5Xml.lib;caffelib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;cudart.lib;cublas.lib;curand.lib;libprotobuf.lib;hdf5_tools.lib;hdf5_hl_fortran.lib;hdf5_fortran.lib;hdf5_hl_f90cstub.lib;hdf5_f90cstub.lib;hdf5_cpp.lib;hdf5_hl_cpp.lib;hdf5_hl.lib;hdf5.lib;opencv_world300.lib;leveldb.lib;cublas_device.lib;cuda.lib;libglog.lib;lmdb.lib;libopenblas.dll.a;libgflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;../3rdparty/lib;../lib;$(BOOST_LIBRARYDIR);../opencv/lib;../glew;$(CGAL_DIR)\lib;$(CGAL_DIR)\auxiliary\gmp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5OpenGL.lib;opengl32.lib;glu32.lib;Qt5Widgets.lib;Qt5Xml.lib;glew32.lib;opencv_world300.lib;libboost_thread-vc120-mt-1_58.lib;CGAL-vc120-mt-4.7.lib;CGAL_Core-vc120-mt-4.7.lib;CGAL_ImageIO-vc120-mt-4.7.lib;CGAL_Qt5-vc120-mt-4.7.lib;libgmp-10.lib;libmpfr-4.lib;caffelib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;cudart.lib;cublas.lib;curand.lib;libprotobuf.lib;hdf5_tools.lib;hdf5_hl_fortran.lib;hdf5_fortran.lib;hdf5_hl_f90cstub.lib;hdf5_f90cstub.lib;hdf5_cpp.lib;hdf5_hl_cpp.lib;hdf5_hl.lib;hdf5.lib;leveldb.lib;cublas_device.lib;cuda.lib;libglog.lib;lmdb.lib;libopenblas.dll.a;libgflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
     </Link>
@@ -206,8 +206,22 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asset.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CenterOperator.cpp" />
+    <ClCompile Include="CGA.cpp" />
+    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Classifier.cpp" />
+    <ClCompile Include="ColorOperator.cpp" />
+    <ClCompile Include="CompOperator.cpp" />
+    <ClCompile Include="CopyOperator.cpp" />
+    <ClCompile Include="CornerCutOperator.cpp" />
+    <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="CustomWidget.cpp" />
+    <ClCompile Include="ExtrudeOperator.cpp" />
+    <ClCompile Include="GableRoof.cpp" />
+    <ClCompile Include="GeneralObject.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -226,9 +240,41 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GLUtils.cpp" />
     <ClCompile Include="GLWidget3D.cpp" />
+    <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="GrammarParser.cpp" />
+    <ClCompile Include="HipRoof.cpp" />
+    <ClCompile Include="InnerSemiCircleOperator.cpp" />
+    <ClCompile Include="InsertOperator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="NumberEval.cpp" />
+    <ClCompile Include="OBJLoader.cpp" />
+    <ClCompile Include="OffsetOperator.cpp" />
+    <ClCompile Include="OffsetPolygon.cpp" />
+    <ClCompile Include="OffsetRectangle.cpp" />
+    <ClCompile Include="OffsetSemiCircle.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Prism.cpp" />
+    <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="RoofGableOperator.cpp" />
+    <ClCompile Include="RoofHipOperator.cpp" />
+    <ClCompile Include="RotateOperator.cpp" />
+    <ClCompile Include="SemiCircle.cpp" />
+    <ClCompile Include="SetupProjectionOperator.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShadowMapping.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="ShapeLOperator.cpp" />
+    <ClCompile Include="SizeOperator.cpp" />
+    <ClCompile Include="SketchyRenderingBuffer.cpp" />
+    <ClCompile Include="SplitOperator.cpp" />
+    <ClCompile Include="TaperOperator.cpp" />
+    <ClCompile Include="TextureOperator.cpp" />
+    <ClCompile Include="TranslateOperator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\caffelib\caffelib.vcxproj">
@@ -301,10 +347,62 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asset.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CenterOperator.h" />
+    <ClInclude Include="CGA.h" />
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="Classifier.h" />
+    <ClInclude Include="ColorOperator.h" />
+    <ClInclude Include="CompOperator.h" />
+    <ClInclude Include="CopyOperator.h" />
+    <ClInclude Include="CornerCutOperator.h" />
+    <ClInclude Include="Cuboid.h" />
+    <ClInclude Include="ExtrudeOperator.h" />
+    <ClInclude Include="GableRoof.h" />
+    <ClInclude Include="GeneralObject.h" />
+    <ClInclude Include="GLUtils.h" />
+    <ClInclude Include="Grammar.h" />
+    <ClInclude Include="GrammarParser.h" />
+    <ClInclude Include="HipRoof.h" />
+    <ClInclude Include="InnerSemiCircleOperator.h" />
+    <ClInclude Include="InsertOperator.h" />
+    <ClInclude Include="NumberEval.h" />
+    <ClInclude Include="OBJLoader.h" />
+    <ClInclude Include="OffsetOperator.h" />
+    <ClInclude Include="OffsetPolygon.h" />
+    <ClInclude Include="OffsetRectangle.h" />
+    <ClInclude Include="OffsetSemiCircle.h" />
+    <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Prism.h" />
+    <ClInclude Include="Pyramid.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="RoofGableOperator.h" />
+    <ClInclude Include="RoofHipOperator.h" />
+    <ClInclude Include="RotateOperator.h" />
+    <ClInclude Include="SemiCircle.h" />
+    <ClInclude Include="SetupProjectionOperator.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShadowMapping.h" />
+    <ClInclude Include="Shape.h" />
+    <ClInclude Include="ShapeLOperator.h" />
+    <ClInclude Include="SizeOperator.h" />
+    <ClInclude Include="SketchyRenderingBuffer.h" />
+    <ClInclude Include="SplitOperator.h" />
+    <ClInclude Include="TaperOperator.h" />
+    <ClInclude Include="TextureOperator.h" />
+    <ClInclude Include="TranslateOperator.h" />
+    <ClInclude Include="Vertex.h" />
     <CustomBuild Include="CustomWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h" />
     <ClInclude Include="GLWidget3D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\fragment.glsl" />
+    <None Include="..\shaders\geometry.glsl" />
+    <None Include="..\shaders\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

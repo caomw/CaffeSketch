@@ -7,8 +7,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	ui.setupUi(this);
 
-	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(onOpen()));
 	connect(ui.actionNew, SIGNAL(triggered()), this, SLOT(onNew()));
+	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(onOpen()));
+	connect(ui.actionOpenCGA, SIGNAL(triggered()), this, SLOT(onOpenCGA()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui.actionPredict, SIGNAL(triggered()), this, SLOT(onPredict()));
 	
@@ -25,6 +26,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	layout->addWidget(glWidget);
 
 	centralWidget()->setLayout(layout);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* e) {
+	glWidget->keyPressEvent(e);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* e) {
+	glWidget->keyReleaseEvent(e);
 }
 
 void MainWindow::clearList() {
@@ -48,6 +57,13 @@ void MainWindow::onOpen() {
 	if (filename.isEmpty()) return;
 
 	glWidget->loadImage(filename);
+}
+
+void MainWindow::onOpenCGA() {
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open CGA file..."), "", tr("CGA Files (*.xml)"));
+	if (filename.isEmpty()) return;
+
+	glWidget->loadCGA(filename.toUtf8().data());
 }
 
 void MainWindow::onPredict() {
